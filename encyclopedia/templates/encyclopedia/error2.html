@@ -1,0 +1,11 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Error page
+{% endblock %}
+
+{% block body %}
+    <!-- add link to edit page -->
+    <p>You cannot create entry "{{ title }}", because it already exists! Please head to edit page if you want to edit this entry.</p>
+
+{% endblock %}
