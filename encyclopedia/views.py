@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
 import markdown2
+import random as r
+from django.shortcuts import render, redirect
 from . import util
 from django import forms
 from django.contrib import messages
@@ -15,6 +16,10 @@ def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
     })
+
+def random(request):
+    title = r.choice(util.list_entries())
+    return redirect("entry", title)
 
 def entry(request, title):
     if util.get_entry(title) != None:
