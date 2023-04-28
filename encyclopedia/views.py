@@ -20,11 +20,12 @@ def index(request):
 def entry(request, title):
     if util.get_entry(title) != None:
         return render(request, "encyclopedia/entry.html", {
+            "title": title,
             "contents": markdown2.markdown(util.get_entry(title))
         })
     else:
         return render(request, "encyclopedia/error.html", {
-            "title": title,
+            "title": title
         })
 
 def error(request):
@@ -43,7 +44,6 @@ def new(request):
                 return render(request, "encyclopedia/error2.html", {
                     "title": title,
                 })
-        
             # add message about succesfully saving new entry 
         else:
             return render(request, "encyclopedia/new.html", {
@@ -59,20 +59,16 @@ def edit(request, title):
         form = EditPageForm(request.POST)
         if form.is_valid():
             content = form.cleaned_data["content"]
-            if util.get_entry(title) == None:
-                util.save_entry(title, content)
-                return redirect(entry, title=title)
-            else:
-                return render(request, "encyclopedia/error2.html", {
-                    "title": title,
-                })
-        
-            # add message about succesfully saving new entry 
+            util.save_entry(title, content)
+            return redirect("entry", title=title)
+            # add message about succesfully editing entry 
         else:
-            return render(request, "encyclopedia/new.html", {
+            return render(request, "encyclopedia/edit.html", {
                 "form": form
             })
     else:
-        return render(request, "encyclopedia/new.html", {
-            "form": NewPageForm()
+        entry = util.get_entry(title)
+        return render(request, "encyclopedia/edit.html", {
+            "title": title,
+            "form": EditPageForm(initial={'content':entry})
         })
