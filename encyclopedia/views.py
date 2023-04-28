@@ -2,8 +2,7 @@ from django.shortcuts import render, redirect
 import markdown2
 from . import util
 from django import forms
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.contrib import messages
 
 class NewPageForm(forms.Form):
     title = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Enter title of your page'}))
@@ -39,12 +38,12 @@ def new(request):
             content = form.cleaned_data["content"]
             if util.get_entry(title) == None:
                 util.save_entry(title, content)
+                messages.add_message(request, messages.SUCCESS, "Page was succesfully created")
                 return redirect(entry, title=title)
             else:
                 return render(request, "encyclopedia/error2.html", {
                     "title": title,
                 })
-            # add message about succesfully saving new entry 
         else:
             return render(request, "encyclopedia/new.html", {
                 "form": form
@@ -60,8 +59,8 @@ def edit(request, title):
         if form.is_valid():
             content = form.cleaned_data["content"]
             util.save_entry(title, content)
+            messages.add_message(request, messages.SUCCESS, "Page was succesfully edited")
             return redirect("entry", title=title)
-            # add message about succesfully editing entry 
         else:
             return render(request, "encyclopedia/edit.html", {
                 "form": form
