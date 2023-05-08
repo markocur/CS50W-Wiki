@@ -87,7 +87,7 @@ def edit(request, title):
     if request.method == "POST":
         form = EditPageForm(request.POST)
         if form.is_valid():
-            content = form.cleaned_data["content"]
+            content = form.cleaned_data["content"].encode('ascii')
             util.save_entry(title, content)
             messages.add_message(request, messages.SUCCESS, "Page was succesfully edited")
             return redirect("entry", title=title)
