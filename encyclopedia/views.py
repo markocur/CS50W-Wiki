@@ -4,22 +4,47 @@ from django.shortcuts import render, redirect
 from . import util
 from django import forms
 from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 class NewPageForm(forms.Form):
     title = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Enter title of your page'}))
     content = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Enter contents of your page in Markdown'}))
 
 class EditPageForm(forms.Form):
-    content = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Enter contents of your page in Markdown'}))
+    content = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control'}))
+
+class SearchForm(forms.Form):
+    query = forms.CharField(widget=forms.TextInput(attrs={'class':'search','placeholder':'Search Encyclopedia'}))
 
 def index(request):
-    return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries()
-    })
+    if request.method == "POST":
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data["query"]
+            all = util.list_entries()
+            if query in all:
+                messages.add_message(request, messages.SUCCESS, "Page was found!")
+                return redirect("entry", query)
+            else:
+                return redirect("search", query)
+    else:
+        return render(request, "encyclopedia/index.html", {
+            "entries": util.list_entries(),
+            "form": SearchForm
+        })
 
 def random(request):
     title = r.choice(util.list_entries())
     return redirect("entry", title)
+
+def search(request, query):
+    all = util.list_entries()
+    search_results = [entry for entry in all if query.lower() in entry.lower()]
+    return render(request, "encyclopedia/search.html", {
+        "query": query,
+        "results": search_results
+    })
 
 def entry(request, title):
     if util.get_entry(title) != None:
