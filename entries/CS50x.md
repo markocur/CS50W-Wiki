@@ -1,2 +1,2 @@
+### Part of [CS50](/wiki/CS50) family of courses
 Harvard University introduction to the intellectual enterprises of computer science and the art of programming. This course teaches you how to solve problems, both with and without code, with an emphasis on correctness, design, and style. Topics include computational thinking, abstraction, algorithms, data structures, and computer science more generally. Problem sets inspired by the arts, humanities, social sciences, and sciences. More than teach you how to program in one language, this course teaches you how to program fundamentally and how to teach yourself new languages ultimately.
-blabla

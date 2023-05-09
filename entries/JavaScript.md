@@ -1,3 +1,1 @@
-## JavaScript
-
-# Popular programming language
+Popular programming language

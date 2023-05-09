@@ -6,6 +6,10 @@
 
 {% block body %}
     <!-- add link to edit page -->
-    <p>You cannot create entry "{{ title }}", because it already exists! Please head to edit page if you want to edit this entry.</p>
+    <p>
+        You cannot create entry "{{ title }}", because it already exists!
+        Please click the link below if you want to edit this entry.
+    </p>
+    <a href="{% url 'edit' title %}" class="btn btn-primary">Edit {{ title }}</a>
 
 {% endblock %}
